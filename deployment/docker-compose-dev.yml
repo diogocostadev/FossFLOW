@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  fossflow-dev:
+    image: fossflow:dev
+    build:
+      context: https://github.com/diogocostadev/FossFLOW.git
+      dockerfile: Dockerfile
+      args:
+        - NODE_ENV=development
+    container_name: fossflow-dev
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    environment:
+      - NODE_ENV=development
+      - ENABLE_SERVER_STORAGE=true
+      - STORAGE_PATH=/data/diagrams
+      - ENABLE_GIT_BACKUP=false
+      - DEBUG=true
+    volumes:
+      - ./data:/data/diagrams
+      - ./logs:/app/logs
+    command: ["npm", "run", "dev"]  # Se houver comando de desenvolvimento
+
+volumes:
+  fossflow_dev_data:
+    driver: local

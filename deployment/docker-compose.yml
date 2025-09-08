@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  fossflow:
+    build:
+      context: https://github.com/diogocostadev/FossFLOW.git#master
+      dockerfile: Dockerfile
+    container_name: fossflow
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      - NODE_ENV=production
+      - ENABLE_SERVER_STORAGE=true
+      - STORAGE_PATH=/data/diagrams
+      - ENABLE_GIT_BACKUP=false
+    volumes:
+      - fossflow_data:/data/diagrams
+      - ./custom-config:/app/config  # Para configurações customizadas se necessário
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  fossflow_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/fossflow/data
