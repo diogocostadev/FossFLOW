@@ -15,7 +15,7 @@ services:
       - STORAGE_PATH=/data/diagrams
       - ENABLE_GIT_BACKUP=false
     volumes:
-      - fossflow_data:/data/diagrams
+      - ./data:/data/diagrams  # Diretório local relativo
       - ./custom-config:/app/config  # Para configurações customizadas se necessário
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80/health"]
@@ -23,7 +23,3 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
-
-volumes:
-  fossflow_data:
-    driver: local
